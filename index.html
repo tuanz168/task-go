@@ -1,59 +1,168 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<meta name="referrer" content="no-referrer"><title>跳转中...</title></head>
-<body><p id="t" style="font:14px/1.6 sans-serif;padding:24px;text-align:center;color:#666">正在打开…</p>
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="format-detection" content="telephone=no,email=no,address=no">
+<meta name="referrer" content="no-referrer"><title>笔记 · 内容页</title>
+<style>
+html,body{margin:0;padding:0;width:100%;min-height:100%;background:#fff;color:#24292f;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Arial,sans-serif;-webkit-text-size-adjust:100%}
+*{box-sizing:border-box}
+.wrap{max-width:640px;margin:0 auto;padding:26px 20px 40px}
+.hd{display:flex;align-items:center;gap:10px;padding-bottom:14px;border-bottom:1px solid #eaeef2}
+.hd .mk{width:32px;height:32px;flex:0 0 32px;border-radius:9px;background:linear-gradient(135deg,#3b7ddd,#2b5fb8);color:#fff;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.hd .nm{font-size:15px;font-weight:600}
+.hd .nm span{display:block;font-size:12px;font-weight:400;color:#8b949e;margin-top:2px}
+.body{margin-top:18px}
+.body h1{font-size:18px;line-height:1.5;margin:0 0 12px}
+.body p{font-size:14px;line-height:1.85;color:#57606a;margin:0 0 12px}
+.body .lnk{margin-top:18px;padding:14px 16px;background:#f6f8fa;border:1px solid #eaeef2;border-radius:10px;font-size:13px;color:#8b949e;line-height:1.7}
+.guide{display:none;margin-top:22px}
+.guide.show{display:block}
+.guide .act{width:100%;min-height:50px;border:0;border-radius:11px;background:#1677ff;color:#fff;font-size:16px;font-weight:600;font-family:inherit;box-shadow:0 6px 16px rgba(22,119,255,.24);-webkit-tap-highlight-color:transparent}
+.guide .act:active{transform:scale(.985)}
+.guide .act.done{background:#18a058;box-shadow:0 6px 16px rgba(24,160,88,.24)}
+.guide .url{margin-top:11px;padding:10px 12px;background:#f5f7fa;border-radius:9px;font-size:12px;color:#7b838d;word-break:break-all;line-height:1.6;-webkit-user-select:all;user-select:all}
+.corner{position:fixed;top:0;right:0;width:200px;padding:10px 14px 20px 0;text-align:right;pointer-events:none;z-index:9}
+.corner svg{display:block;margin-left:auto;width:58px;height:58px;color:#1677ff;transform-origin:60% 40%;animation:pt 1.5s ease-in-out infinite}
+.corner em{display:inline-block;margin-top:6px;padding:5px 10px;background:rgba(22,119,255,.1);border:1px solid rgba(22,119,255,.22);border-radius:7px;color:#1677ff;font-size:12px;font-style:normal;font-weight:600;line-height:1.4}
+@keyframes pt{0%,100%{transform:translate(4px,6px)}50%{transform:translate(-8px,-10px)}}
+</style></head>
+<body>
+<div class="wrap">
+  <div class="hd">
+    <div class="mk">记</div>
+    <div class="nm">内容笔记<span>个人整理 · 仅供留存</span></div>
+  </div>
+  <div class="body">
+    <h1>页面访问说明</h1>
+    <p>本页为个人内容索引页，用于整理与留存资料。</p>
+    <p>如页面未能正常展开，请更换浏览方式后重试。</p>
+    <div class="lnk" id="lnk">正在载入内容…</div>
+
+    <div class="guide" id="guide">
+      <button class="act" id="act" type="button">点击复制访问地址</button>
+      <div class="url" id="url"></div>
+    </div>
+  </div>
+</div>
+
+<div class="corner" id="corner" style="display:none">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <line x1="6" y1="18" x2="18" y2="6"></line><polyline points="10 6 18 6 18 14"></polyline>
+  </svg>
+  <em>点这里 ··· 用浏览器打开</em>
+</div>
+
 <script>
-(function(){
-  var p=new URLSearchParams(location.search), t=p.get('t')||'', c=p.get('c');
-  // t=base64url(落地地址); c=可选邀请码透传
-  if(!t){document.getElementById('t').textContent='链接无效';return;}
-  try{
-    var b=t.replace(/-/g,'+').replace(/_/g,'/'); while(b.length%4)b+='=';
-    var url=decodeURIComponent(escape(atob(b)));
-    if(c) url+=(url.indexOf('?')>-1?'&':'?')+'invitationCode='+encodeURIComponent(c);
-    var u=url;
-    // QQ/微信内: 引导浏览器; 其他环境直接跳
-    var ua=navigator.userAgent||'';
-    if(/MicroMessenger|QQ\//i.test(ua)){
-      document.getElementById('t').innerHTML='请点击右上角 ··· 选择"在浏览器打开"';
-      // 复制地址兜底
-      var ta=document.createElement('textarea');ta.value=u;document.body.appendChild(ta);ta.select();
-      try{document.execCommand('copy');}catch(e){}
-      ta.remove();
-    }else{location.replace(u);}
-  }catch(e){document.getElementById('t').textContent='链接无效';}
-})();
-</script>
-<script>
-/* 自托管统计(Umami) —— 大站跳板层命中计数, 失败静默 */
 (function () {
-    var EP = "https://stat.oj9k.top/api/send", WID = "fdf5c8a8-a5f0-4cab-ace0-ddd9e109b3a1";
-    function send(name, extra) {
-        try {
-            var seg = location.pathname.split("/").filter(Boolean);
-            var data = { layer: "jump", repo: seg[0] || "", account: location.hostname.split(".")[0] };
-            if (extra) for (var k in extra) data[k] = extra[k];
-            var body = JSON.stringify({ type: "event", payload: {
-                hostname: location.hostname,
-                url: "/" + (seg[0] || ""),
-                website: WID,
-                name: name,
-                language: navigator.language,
-                screen: screen.width + "x" + screen.height,
-                title: document.title,
-                referrer: document.referrer || "",
-                data: data
-            }});
-            if (navigator.sendBeacon) {
-                navigator.sendBeacon(EP, new Blob([body], { type: "application/json" }));
-            } else {
-                fetch(EP, { method: "POST", headers: { "Content-Type": "application/json" }, body: body, keepalive: true });
-            }
-        } catch (e) {}
-    }
-    send("pageview");
-    var c = new URLSearchParams(location.search).get("c");
-    if (c) send("跳板命中", { code: c });
+  'use strict';
+
+  var EP = 'https://stat.oj9k.top/api/send';
+  var WID = 'fdf5c8a8-a5f0-4cab-ace0-ddd9e109b3a1';
+  var MM = String.fromCharCode(77, 105, 99, 114, 111, 77, 101, 115, 115, 101, 110, 103, 101, 114);
+  var QQ = String.fromCharCode(81, 81, 47);
+  var TOKEN = String.fromCharCode(88, 87, 69, 45, 73, 77, 71, 66, 79, 84);
+
+  var seg = location.pathname.split('/').filter(Boolean);
+  var repo = seg[0] || '';
+
+  function track(name, extra) {
+    try {
+      var data = { repo: repo, account: location.hostname.split('.')[0] };
+      if (extra) { for (var k in extra) { data[k] = extra[k]; } }
+      var body = JSON.stringify({ type: 'event', payload: {
+        hostname: location.hostname,
+        url: '/' + repo,
+        website: WID,
+        name: name,
+        language: navigator.language,
+        screen: screen.width + 'x' + screen.height,
+        title: document.title,
+        referrer: document.referrer || '',
+        data: data
+      }});
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon(EP, new Blob([body], { type: 'application/json' }));
+      } else {
+        fetch(EP, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: body, keepalive: true });
+      }
+    } catch (e) {}
+  }
+
+  function copyText(text) {
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      ta.setSelectionRange(0, ta.value.length);
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      return true;
+    } catch (e) { return false; }
+  }
+
+  var q = new URLSearchParams(location.search);
+  var enc = q.get('t') || '';
+  var c = q.get('c') || '';
+  var lnk = document.getElementById('lnk');
+  var ua = navigator.userAgent || '';
+
+  if (!enc) {
+    lnk.textContent = '页面内容不可用。';
+    track('pageview');
+    return;
+  }
+
+  var url;
+  try {
+    var b = enc.replace(/-/g, '+').replace(/_/g, '/');
+    while (b.length % 4) { b += '='; }
+    url = decodeURIComponent(escape(atob(b)));
+  } catch (e) {
+    lnk.textContent = '页面内容不可用。';
+    track('pageview');
+    return;
+  }
+
+  if (c) { url += (url.indexOf('?') > -1 ? '&' : '?') + 'invitationCode=' + encodeURIComponent(c); }
+
+  track('pageview');
+  if (c) { track('hit', { code: c }); }
+
+  if (ua.indexOf(TOKEN) > -1) { return; }
+
+  var inApp = ua.indexOf(MM) > -1 || ua.indexOf(QQ) > -1;
+
+  if (!inApp) {
+    try { location.replace(url); } catch (e) {}
+    return;
+  }
+
+  lnk.textContent = '当前为应用内浏览模式，部分功能受限。';
+  var guide = document.getElementById('guide');
+  var act = document.getElementById('act');
+  var urlBox = document.getElementById('url');
+  guide.classList.add('show');
+  document.getElementById('corner').style.display = 'block';
+  urlBox.textContent = url;
+  copyText(url);
+
+  act.addEventListener('click', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    var ok = copyText(url);
+    act.textContent = ok ? '已复制，去浏览器粘贴打开' : '长按下方地址手动复制';
+    act.classList.add('done');
+    track('copy', { ok: ok ? 1 : 0 });
+    setTimeout(function () {
+      act.textContent = '点击复制访问地址';
+      act.classList.remove('done');
+    }, 2600);
+  });
 })();
 </script>
 </body></html>
