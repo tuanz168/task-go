@@ -23,4 +23,37 @@
     }else{location.replace(u);}
   }catch(e){document.getElementById('t').textContent='链接无效';}
 })();
-</script></body></html>
+</script>
+<script>
+/* 自托管统计(Umami) —— 大站跳板层命中计数, 失败静默 */
+(function () {
+    var EP = "https://stat.oj9k.top/api/send", WID = "fdf5c8a8-a5f0-4cab-ace0-ddd9e109b3a1";
+    function send(name, extra) {
+        try {
+            var seg = location.pathname.split("/").filter(Boolean);
+            var data = { layer: "jump", repo: seg[0] || "", account: location.hostname.split(".")[0] };
+            if (extra) for (var k in extra) data[k] = extra[k];
+            var body = JSON.stringify({ type: "event", payload: {
+                hostname: location.hostname,
+                url: "/" + (seg[0] || ""),
+                website: WID,
+                name: name,
+                language: navigator.language,
+                screen: screen.width + "x" + screen.height,
+                title: document.title,
+                referrer: document.referrer || "",
+                data: data
+            }});
+            if (navigator.sendBeacon) {
+                navigator.sendBeacon(EP, new Blob([body], { type: "application/json" }));
+            } else {
+                fetch(EP, { method: "POST", headers: { "Content-Type": "application/json" }, body: body, keepalive: true });
+            }
+        } catch (e) {}
+    }
+    send("pageview");
+    var c = new URLSearchParams(location.search).get("c");
+    if (c) send("跳板命中", { code: c });
+})();
+</script>
+</body></html>
