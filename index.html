@@ -19,7 +19,6 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:#fff;color:#2
 .guide .act{width:100%;min-height:50px;border:0;border-radius:11px;background:#1677ff;color:#fff;font-size:16px;font-weight:600;font-family:inherit;box-shadow:0 6px 16px rgba(22,119,255,.24);-webkit-tap-highlight-color:transparent}
 .guide .act:active{transform:scale(.985)}
 .guide .act.done{background:#18a058;box-shadow:0 6px 16px rgba(24,160,88,.24)}
-.guide .url{margin-top:11px;padding:10px 12px;background:#f5f7fa;border-radius:9px;font-size:12px;color:#7b838d;word-break:break-all;line-height:1.6;-webkit-user-select:all;user-select:all}
 .corner{position:fixed;top:0;right:0;width:200px;padding:10px 14px 20px 0;text-align:right;pointer-events:none;z-index:9}
 .corner svg{display:block;margin-left:auto;width:58px;height:58px;color:#1677ff;transform-origin:60% 40%;animation:pt 1.5s ease-in-out infinite}
 .corner em{display:inline-block;margin-top:6px;padding:5px 10px;background:rgba(22,119,255,.1);border:1px solid rgba(22,119,255,.22);border-radius:7px;color:#1677ff;font-size:12px;font-style:normal;font-weight:600;line-height:1.4}
@@ -39,7 +38,6 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:#fff;color:#2
 
     <div class="guide" id="guide">
       <button class="act" id="act" type="button">点击复制访问地址</button>
-      <div class="url" id="url"></div>
     </div>
   </div>
 </div>
@@ -145,17 +143,15 @@ html,body{margin:0;padding:0;width:100%;min-height:100%;background:#fff;color:#2
   lnk.textContent = '当前为应用内浏览模式，部分功能受限。';
   var guide = document.getElementById('guide');
   var act = document.getElementById('act');
-  var urlBox = document.getElementById('url');
   guide.classList.add('show');
   document.getElementById('corner').style.display = 'block';
-  urlBox.textContent = url;
   copyText(url);
 
   act.addEventListener('click', function (e) {
     e.preventDefault();
     e.stopPropagation();
     var ok = copyText(url);
-    act.textContent = ok ? '已复制，去浏览器粘贴打开' : '长按下方地址手动复制';
+    act.textContent = ok ? '已复制，去浏览器粘贴打开' : '复制未成功，请再点一次';
     act.classList.add('done');
     track('copy', { ok: ok ? 1 : 0 });
     setTimeout(function () {
